@@ -1,81 +1,165 @@
 ﻿#include <iostream>
 /*
     Реализуйте класс Дробь. Необходимо хранить числитель и знаменатель
-    в качестве переменных-членов.Реализуйте функции-члены для ввода 
+    в качестве переменных-членов.Реализуйте функции-члены для ввода
     данных в переменные-члены,для выполнения арифметических операций
-    (сложение, вычитание, умножение, деление, и т.д.). Арифметические 
-    операции должны выполняться с двумя дробями. Пример заголовка 
+    (сложение, вычитание, умножение, деление, и т.д.). Арифметические
+    операции должны выполняться с двумя дробями. Пример заголовка
     функции-члена для сложения дробей: void Mult(drob x)
 */
 
-class Fraction                                                                  // класс Дробь
+class Fraction                                                                     // класс Дробь
 {
-    int num;                                                                    // числитель
-    int denom;                                                                  // знаменатель
+    int num;                                                                       // числитель
+    int denom;                                                                     // знаменатель
 
 public:
-    void Set(int x, int y)                                                      // сeттер, присваивание значений
+    void Set(int x, int y)                                                         // сeттер, присваивание значений
     {
         num = x;
         denom = y;
     }
-    void Add(int numb)                                                          // функция сложения
+    int NOD(Fraction x)                                                            // наибольший общий делитель для знаменателей двух дробей
     {
-        num += (numb * denom);
+        int a = denom;
+        int b = x.denom;
+        while (a != 0 && b != 0)                                                   // пока переменные не равны нулю, выполняем
+        {                                                                          // операцию деления по модулю для нахождения НОД
+            if (a > b) a = a % b;
+            else b = b % a;
+        }
+
+        if (a > 0) return a;                                                       // возвращаем найденный НОД
+        else return b;
     }
-    void Sub(int numb)                                                          // функция вычитания
+    int NODRED()                                                                   // наибольший общий делитель для сокращения одной дроби
     {
-        num -= (numb * denom);
+        int a = num;
+        int b = denom;
+        while (a != 0 && b != 0)
+        {
+            if (a > b) a = a % b;
+            else b = b % a;
+        }
+
+        if (a > 0) return a;
+        else return b;
     }
-    void Mult(int numb)                                                         // функция умножения
+    int NOK(Fraction x)                                                           // функция нахождения наименьшего общего кратного
     {
-        num *= numb;
+        return denom * x.denom / NOD(x);
     }
-    void Div(int numb)                                                          // функция деления
+    void Add(Fraction x)                                                          // функция сложения
     {
-        denom *= numb;
+        num = num * (NOK(x) / denom) + x.num * (NOK(x) / x.denom);
+        denom = NOK(x);      
+        
     }
-    int GetNum()                                                                // гeттер для числителя
+    void Sub(Fraction x)                                                          // функция вычитания
     {
-        return num;
+        num = num * (NOK(x) / denom) - x.num * (NOK(x) / x.denom);
+        denom = NOK(x);
     }
-    int GetDenom()                                                              // гeттер для знаменателя
+    void Mult(Fraction x)                                                         // функция умножения
     {
-        return denom;
+        num *= x.num;
+        denom *= x.denom;
     }
-    double Res()                                                                // функция для подсчета результата
+    void Div(Fraction x)                                                          // функция деления
     {
-        return (double) num / denom;
+        if (x.num < 0)                                                            // если второй знаменатель знаковый,
+        {
+            num *= x.denom * -1;                                                  // то переносим знак в числитель,
+            denom *= x.num * - 1;                                                 // и избавляемся от знака в знаменателе
+        } 
+        else                                                                      // если второй знаменатель без знака,
+        { 
+            num *= x.denom;                                                       // то выполняем операцию деления дробей
+            denom *= x.num;
+        }    
     }
-    void Output()                                                               // функция вывода результата
+    void Result()                                                                 // функция вывода результата
     {
-        std::cout << " Result:  " << GetNum() << '/' 
-            << GetDenom() << " = "  << Res() << std::endl;
+        int nod;                                                                  // хранит найденный НОД для одной дроби (итоговой)                                                           
+
+        if (num < 0)                                                              // если числитель меньше нуля,
+        {
+            num *= -1;                                                            // то избавляемся от знака
+            nod = NODRED();
+
+            if (num < denom)                                                      // если дробь правильная, то выполняем сокращение
+            {
+                num /= nod;
+                denom /= nod;
+                std::cout << " Result:  " << num * -1 << '/'                      // возвращаем знак
+                    << denom << std::endl;
+            }
+            else                                                                  // иначе - неправильная дробь - выводим целую часть
+            {
+                int part = num / denom;                                           // целая часть 
+                num %= denom;                                                     // остаток - числитель, знаменатель тот же
+
+                num /= nod;                                                       // сокращение дроби
+                denom /= nod;
+
+                std::cout << " Result: "
+                    << " integer part of a fraction " << part * -1                // возвращаем знак целой части
+                    << " fractional part " << num << '/'
+                    << denom << std::endl;
+            }
+        }
+        else                                                                      // иначе числитель больше нуля
+        {
+            nod = NODRED();
+
+            if (num < denom)                                                      // если дробь правильная, то выполняем сокращение
+            {
+                
+                num /= nod;
+                denom /= nod;
+                std::cout << " Result:  " << num << '/'
+                    << denom << std::endl;
+            }
+            else                                                                  // иначе - неправильная дробь - выводим целую часть
+            {
+                int part = num / denom;                                           // целая часть 
+                num %= denom;                                                     // остаток - числитель
+
+                num /= nod;                                                       // cокращение дроби
+                denom /= nod;
+
+                std::cout << " Result: "
+                    << " integer part of a fraction " << part
+                    << " fractional part " << num << '/'
+                    << denom << std::endl;
+            }
+        }
     }
 };
 
 int main()
 {
     std::cout << " Fractional Calculator\n";
- 
-    int x, y;                                                                   // для ввода числителя и знаменателя
-    int oper;                                                                   // для выбора операции
-    int numb;                                                                   // второе число для проведения нужной операции
-    bool choice = true;                                                         // для продолжения работы в калькуляторе
+    std::cout << " For a negative value, enter the sign only in the numerator\n\n";
 
-    Fraction calc{};                                                            // выделение памяти для класса
+    int x, y, c,d;                                                                   // для ввода числителя и знаменателя
+    int oper;                                                                        // для выбора операции
+    bool choice = true;                                                              // для продолжения работы в калькуляторе
+
+    Fraction one{};
+    Fraction two{};
     do
     {
-        std::cout << " Enter numerator:\n";
+        std::cout << " Enter first numerator:\n";
         std::cin >> x;
         do
         {
-            std::cout << " Enter denominator:\n";
+            std::cout << " Enter first denominator:\n";
             std::cin >> y;
-            if (y == 0) std::cout << " The denominator cannot be zero!!!\n";
-        } while (y == 0);
-        
-        calc.Set(x, y);
+            if (y <= 0) std::cout << " The denominator cannot be less than zero or equal to zero!\n";
+        } while (y <= 0);
+
+         one.Set(x, y);
 
         std::cout << " Choose an operation:\n"
             << " 1 - addition\n"
@@ -84,39 +168,37 @@ int main()
             << " 4 - division\n";
         std::cin >> oper;
 
+        std::cout << " Enter second numerator:\n";
+        std::cin >> c;
+        do
+        {
+            std::cout << " Enter second denominator:\n";
+            std::cin >> d;
+            if (d <= 0) std::cout << " The denominator cannot be less than zero or equal to zero!\n";
+        } while (d <= 0);
+
+        two.Set(c, d);
+
         switch (oper)
         {
         case 1:
-            std::cout << " Enter term:\n";
-            std::cin >> numb;
-            calc.Add(numb);
-            calc.Output();
+            one.Add(two);
+            one.Result();
             break;
 
         case 2:
-            std::cout << " Enter subtrahend:\n";
-            std::cin >> numb;
-            calc.Sub(numb);
-            calc.Output();
+            one.Sub(two);
+            one.Result();
             break;
 
         case 3:
-            std::cout << " Enter multiplier:\n";
-            std::cin >> numb;
-            calc.Mult(numb);
-            calc.Output();
+            one.Mult(two);
+            one.Result();
             break;
 
         case 4:
-            do
-            {
-                std::cout << " Enter divisor:\n";
-                std::cin >> numb;
-                if (numb == 0) std::cout << " The divisor cannot be zero!!!\n";
-            } while (numb== 0);
-           
-            calc.Div(numb);
-            calc.Output();
+            one.Div(two);
+            one.Result();
             break;
         }
 
@@ -126,7 +208,7 @@ int main()
         std::cin >> choice;
         if (choice == 1) system("cls");
 
-    } while (choice);
+    } while (choice);                                                                          // работа цикла длится, пока выбор пользователя true (yes)
 
     return 0;
 }
