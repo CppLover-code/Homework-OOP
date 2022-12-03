@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ДЗ 25.11.2022 Телефонная книга(конструкторы, деструкторы)", "ДЗ 25.11.2022 Телефонная книга(конструкторы, деструкторы)\ДЗ 25.11.2022 Телефонная книга(конструкторы, деструкторы).vcxproj", "{A863AD8E-F91A-47ED-8F21-4DDCAF7D83F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A863AD8E-F91A-47ED-8F21-4DDCAF7D83F4}.Debug|x64.ActiveCfg = Debug|x64
+		{A863AD8E-F91A-47ED-8F21-4DDCAF7D83F4}.Debug|x64.Build.0 = Debug|x64
+		{A863AD8E-F91A-47ED-8F21-4DDCAF7D83F4}.Debug|x86.ActiveCfg = Debug|Win32
+		{A863AD8E-F91A-47ED-8F21-4DDCAF7D83F4}.Debug|x86.Build.0 = Debug|Win32
+		{A863AD8E-F91A-47ED-8F21-4DDCAF7D83F4}.Release|x64.ActiveCfg = Release|x64
+		{A863AD8E-F91A-47ED-8F21-4DDCAF7D83F4}.Release|x64.Build.0 = Release|x64
+		{A863AD8E-F91A-47ED-8F21-4DDCAF7D83F4}.Release|x86.ActiveCfg = Release|Win32
+		{A863AD8E-F91A-47ED-8F21-4DDCAF7D83F4}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {72110390-A16C-4214-A008-8853E976DFBB}
+	EndGlobalSection
+EndGlobal
