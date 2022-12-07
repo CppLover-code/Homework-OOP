@@ -20,7 +20,7 @@ int main()
 	int number = 1;																				// номер абонента в книге
 	int choice;
 
-	Contact contact;
+	//Contact contact; contact.Add(mas, count, number); // если функции внутри класса
 	Contact* mas  = new Contact[count];                                                         // массив для хранения контактов
 
 	do
@@ -40,7 +40,7 @@ int main()
 		{
 		case 1:
 			
-			contact.Add(mas, count, number);
+			Add(mas, count, number);
 			Sleep(1500);
 			system("cls");
 			break;
@@ -56,14 +56,14 @@ int main()
 
 		case 3:
 
-			contact.Search(mas,count);
+			Search(mas,count);
 
 			Sleep(2500);
 			system("cls");
 			break;
 
 		case 4:
-			contact.Delete(mas, count, number);
+			Delete(mas, count, number);
 			Sleep(2500);
 			system("cls");
 			break;

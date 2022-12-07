@@ -4,14 +4,15 @@
 
 class Contact
 {
+	
+
+public:
 	char* name;
 	char* home_tel;
 	char* work_tel;
 	char* mob_tel;
 	char* add_inf;
 	int number;
-
-public:
 	Contact()
 	{
 		//std::cout << "Constructor by default\n";
@@ -58,9 +59,7 @@ public:
 			<< "Additional Information: " << add_inf << std::endl;
 	}
 
-	void Add(Contact*& mas, int& count, int& numb);
-	void Search(Contact*& mas, int count);
-	void Delete(Contact*& mas, int& count, int& numb);
+	
 
 	~Contact()
 	{
@@ -72,3 +71,7 @@ public:
 		delete[] add_inf;
 	}
 };
+
+void Add(Contact*& mas, int& count, int& numb);
+void Search(Contact*& mas, int count);
+void Delete(Contact*& mas, int& count, int& numb);

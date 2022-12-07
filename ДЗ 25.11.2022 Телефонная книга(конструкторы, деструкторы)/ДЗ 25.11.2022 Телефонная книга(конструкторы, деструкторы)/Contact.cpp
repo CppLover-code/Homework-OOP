@@ -1,9 +1,8 @@
+#include "Contact.h"
 #include <iostream>
 #include <Windows.h>
-#include "Contact.h"
-//#include "colors.h"
 
-void Contact::Add(Contact*& mas, int& count, int& numb)
+void Add(Contact*& mas, int& count, int& numb)
 {
 	Contact* temp = new Contact[count + 1];
 	for (int i = 0; i < count; i++)
@@ -60,7 +59,7 @@ void Contact::Add(Contact*& mas, int& count, int& numb)
 	mas = temp;
 }
 
-void Contact::Search(Contact*& mas, int count)
+void Search(Contact*& mas, int count)
 {
 	int flag = 0;
 	std::cout << "Enter a name to search: ";
@@ -78,7 +77,7 @@ void Contact::Search(Contact*& mas, int count)
 	}
 	if (flag == 0) std::cout << " Contact not found!\n";
 }
-void Contact::Delete(Contact*& mas, int& count, int& numb)
+void Delete(Contact*& mas, int& count, int& numb)
 {
 	short del_numb;
 	bool flag = 0;

@@ -18,8 +18,8 @@
     <ClCompile Include="ДЗ 25.11.2022 Телефонная книга(конструкторы, деструкторы).cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Source.cpp">
-      <Filter>Файлы заголовков</Filter>
+    <ClCompile Include="Contact.cpp">
+      <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
