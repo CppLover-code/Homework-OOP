@@ -20,9 +20,9 @@ class MyString
 {
     char* str;
     int length;
-
-public:
     static int numberOfObject;                                                                                    // статическое поле класса
+
+public:   
 
     MyString()                                                                                                    // конструктор по умолчанию, позволяющий создать строку длиной 80 символов
     {
@@ -61,8 +61,13 @@ public:
 
     void Fill()                                                                                                   // метод для ввода строк с клавиатуры
     {
+        if (str != NULL) delete[] str;
         cout << "Введите строку:\n";
-        cin.getline(str, length);
+        char a[20];
+        cin.getline(a, 20);
+        length = strlen(a) + 1;
+        str = new char[length];
+        strcpy_s(str, length, a);
     }
 
     void Output()                                                                                                 // метод для вывода строк на экран

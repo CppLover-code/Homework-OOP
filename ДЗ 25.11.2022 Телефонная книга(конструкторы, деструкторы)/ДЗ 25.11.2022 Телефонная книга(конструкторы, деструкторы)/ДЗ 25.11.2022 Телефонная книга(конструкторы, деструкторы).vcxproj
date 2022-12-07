@@ -127,7 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="ДЗ 25.11.2022 Телефонная книга(конструкторы, деструкторы).cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Contact.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
