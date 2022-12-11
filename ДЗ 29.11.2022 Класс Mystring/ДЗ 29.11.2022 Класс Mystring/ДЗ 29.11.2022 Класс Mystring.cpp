@@ -13,7 +13,7 @@
     которая будет возвращать количество созданных объектов-строк.
     * конструктор копирования
     * перегрузка оператора "+"
-    * 
+    * перегрузка оператора <
 */
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -66,7 +66,7 @@ public:
 
     MyString operator+(const MyString& s)                // перегрузка опертора + для двух строк
     {
-        cout << " -Перегрузка оператора \"+\" 5 - \n ";
+        cout << "Перегрузка оператора \"+\" \n ";
         MyString temp;                                   // создаем временный объект, в котором будет храниться "сумма" 2 строк
         temp.length = length + s.length;                 // кол-во символов равно сумме символов двух строк (length - поле, 
                                                          //для которого вызвана функция, s.length - для второй строки, которая передана в функцию)
@@ -77,6 +77,30 @@ public:
         numberOfObject++;
 
         return temp;                                     // возврат результата в место вызова ф-ии
+    }
+    MyString operator<(const MyString& s)                // перегрузка опертора < для двух строк
+    {
+        cout << "Перегрузка оператора <\n";
+        int c = strcmp(str, s.str);
+        if (c > 0)
+        {
+            char buff[50] {"Первая строка больше второй!\n"};
+            MyString check(buff);
+            return check;
+        }
+        else if (c < 0)
+        {
+            char buff[50]{ "Первая строка меньше второй!\n" };
+            MyString check(buff);
+            return check;
+        }
+        else if (c == 0)
+        {
+            char buff[50]{ "Строки равны!\n" };
+            MyString check(buff);
+            return check;
+        }
+        numberOfObject++;
     }
 
     void Fill()                                                                                                   // метод для ввода строк с клавиатуры
@@ -129,7 +153,7 @@ int main()
     str2.Output();
 
     cout << "Создание строки и инициализация её строкой,\nполученной в виде параметра\n";
-    char* s = new char[7] {"Hello!"};
+    char* s = new char[7] {"HeLLo "};
     MyString str3(s);
     str3.Output();
 
@@ -146,6 +170,12 @@ int main()
     MyString str6(s2);
     MyString RES = str5 + str6;
     RES.Output();
+
+    cout << "Перегрузка оператора < для 2 строк\n";  // использую уже существующие объекты str3 и str5
+     
+    MyString CMP = str5 < str3;                      // {"Hello "} {"HeLLo "}
+
+    CMP.Output();
 
     cout << "Количество созданных объектов-строк - " << MyString::getNumber() << endl;
 
