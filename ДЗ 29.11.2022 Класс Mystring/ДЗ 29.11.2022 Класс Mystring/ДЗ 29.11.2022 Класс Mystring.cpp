@@ -11,7 +11,12 @@
     Класс должен содержать методы для ввода строк с клавиатуры и вывода строк 
     на экран и деструктор. Также нужно реализовать статическую функцию-член, 
     которая будет возвращать количество созданных объектов-строк.
+    * конструктор копирования
+    * перегрузка оператора "+"
+    * 
 */
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <string.h>
 using namespace std;
@@ -20,7 +25,7 @@ class MyString
 {
     char* str;
     int length;
-    static int numberOfObject;                                                                                    // статическое поле класса
+    static int numberOfObject;                           // статическое поле класса
 
 public:   
 
@@ -49,7 +54,7 @@ public:
         numberOfObject++;
     }
 
-    MyString(const MyString& s)                                                                                   // конструктор копирования одного объекта в другой // создание и инициализация
+    MyString(const MyString& s)                          // конструктор копирования одного объекта в другой // создание и инициализация
     {
         cout << " -Конструктор 4-\n ";
 
@@ -57,6 +62,21 @@ public:
         str = new char[length + 1];
         strcpy_s(str,length + 1, s.str);
         numberOfObject++;
+    }
+
+    MyString operator+(const MyString& s)                // перегрузка опертора + для двух строк
+    {
+        cout << " -Перегрузка оператора \"+\" 5 - \n ";
+        MyString temp;                                   // создаем временный объект, в котором будет храниться "сумма" 2 строк
+        temp.length = length + s.length;                 // кол-во символов равно сумме символов двух строк (length - поле, 
+                                                         //для которого вызвана функция, s.length - для второй строки, которая передана в функцию)
+        temp.str = new char[temp.length + 1];            // выделяем память размером двух строк + \0 терм.
+        strcpy(temp.str, str);                           // копируем в временную объект строку(this), для которой вызвана функция
+        strcat(temp.str, s.str);                         // соединяем врменный объект-строку со строкой, которая передана в качестве параметра
+
+        numberOfObject++;
+
+        return temp;                                     // возврат результата в место вызова ф-ии
     }
 
     void Fill()                                                                                                   // метод для ввода строк с клавиатуры
@@ -77,7 +97,7 @@ public:
             << endl;
     }
 
-    static int getNumber()                                                                                        // статическая функция-член для подсчёта кол-ва созданных объектов
+    static int getNumber()                               // статическая функция-член для подсчёта кол-ва созданных объектов
     {
         return numberOfObject;
     }
@@ -90,7 +110,7 @@ public:
     }
 };
 
-int MyString::numberOfObject{0};                                                                                 // uniform-инициализация статического поля
+int MyString::numberOfObject{0};                         // uniform-инициализация статического поля
 
 int main()
 {
@@ -114,12 +134,24 @@ int main()
     str3.Output();
 
     cout << "Создание строки и инициализация её строкой,\nполученной от пользователя(с клавиатуры)\n";
-    MyString str4 = str2;                                                                                       // использую уже существующий объект str2
+    MyString str4 = str2;                                                                               // использую уже существующий объект str2
     str4.Output(); 
+
+    cout << "Перегрузка оператора + для конкатенации строк\n";
+    
+    char* s1 = new char[7] {"Hello "};
+    char* s2 = new char[7] {"world!"};
+
+    MyString str5(s1);
+    MyString str6(s2);
+    MyString RES = str5 + str6;
+    RES.Output();
 
     cout << "Количество созданных объектов-строк - " << MyString::getNumber() << endl;
 
     delete[] s;
+    delete[] s1;
+    delete[] s2;
 
     return 0;
 }
