@@ -32,7 +32,7 @@ class MyString
     static int numberOfObject;                          // статическое поле класса
 
 public:   
-
+    
     MyString()                                          // конструктор по умолчанию, позволяющий создать строку длиной 80 символов
     {
         //cout << " -Конструктор 1-\n";
@@ -120,6 +120,8 @@ public:
         str = new char[temp.length];                     // выделяем память для строки (this) большего на 1 размера
         strcpy(str, temp.str);                           // копируем в this временную строку, которая содержит результат
 
+        delete[] s;
+
         return *this;                                    // возврат this-строки в место вызова функции
     }
 
@@ -161,6 +163,7 @@ public:
         strcat(temp.str, s);                             // соединяем врменный объект-строку со строкой символов размером r
 
         numberOfObject++;
+        delete[] s;
 
         return temp;                                     // возврат результата в место вызова ф-ии
     }
@@ -180,6 +183,18 @@ public:
         numberOfObject++;
 
         return temp;                                           // возврат результата в место вызова ф-ии
+    }
+
+    void SetStr(char* s)
+    {
+        length = strlen(s);
+        str = new char[length + 1];
+        if (str) strcpy_s(str, length + 1, s);
+    }
+
+    char* GetStr() const
+    {
+        return str;
     }
 
     void Fill()                                         // метод для ввода строк с клавиатуры
@@ -214,7 +229,29 @@ public:
     }
 };
 
-int MyString::numberOfObject{0};  // uniform-инициализация статического поля
+int MyString::numberOfObject{ 0 };                            // uniform-инициализация статического поля
+
+MyString operator+(int d, MyString Z)                         // глобальная перегрузка оператора "+" - увеличение строки на N символов (символы записываются в начало)
+{
+    char* s = new char[d + 1];                                // для добавления в начало нашего объекта-строки d символов 'x'
+    for (int i = 0; i <= d; i++)                              // заполняем строку нужным кол-вом(d) символов 'x'
+    {
+        if (i < d) s[i] = { 'x' };
+        else if (i == d) s[i] = { '\0' };                     // конец строки
+    }
+    char* s1 = new char[strlen(s) + strlen(Z.GetStr()) + 1];  // строка, которая будет содержать символы 1 операнда( d иксов 'x') и символы второго операнда (объект MyString)
+    strcpy(s1, s);                                            // сначала в новую строку копируем строку с кол-вом d  'x';
+    strcat(s1, Z.GetStr());                                   // соединяем новую строку с вторым операндом (объект MyString)
+
+    MyString temp;                                            // создаем временный объект,
+                                                              // длина которого определяется в сеттере SetStr
+    temp.SetStr(s1);                                          // передаем строку в сеттер для инициализации объекта строкой, содержащей результат операции "+"
+
+    delete[] s;
+    delete[] s1;
+
+    return temp;                                              // возврат результата в место вызова ф-ии
+}
 
 int main()
 {
@@ -252,7 +289,6 @@ int main()
     RES.Output();
 
     cout << "Перегрузка оператора < для 2 строк\n";  // использую уже существующие объекты str3 и str5
-     
     MyString CMP = str5 < str3;                      // {"Hello "} {"HeLLo "}
     CMP.Output();
 
@@ -287,6 +323,15 @@ int main()
     MyString NEW2 = str10 - T;
     //str10.Output();  // не меняется
     NEW2.Output();
+
+    cout << "Перегрузка оператора + (увеличение на N символов) - глобальный оператор\n";
+    MyString str11;
+    str11.Fill();
+    cout << "На сколько символов нужно увеличить строку?\n";
+    int D;
+    cin >> D;
+    MyString NEW3 = D + str11;
+    NEW3.Output();
 
     cout << "Количество созданных объектов-строк - " << MyString::getNumber() << endl;
 
