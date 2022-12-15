@@ -263,7 +263,7 @@ int main()
     one.Output();
     two.Output();
 
-    one* two;
+    one * two;
     one.Output();
 
     int r = 2;
