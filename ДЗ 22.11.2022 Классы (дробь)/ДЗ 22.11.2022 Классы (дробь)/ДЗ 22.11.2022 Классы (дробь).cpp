@@ -19,6 +19,7 @@ public:
         num = x;
         denom = y;
     }
+
     int NOD(Fraction x)                                                            // наибольший общий делитель для знаменателей двух дробей
     {
         int a = denom;
@@ -44,6 +45,14 @@ public:
 
         if (a > 0) return a;
         else return b;
+    }
+    int GetN()
+    {
+        return num;
+    }
+    int GetD()
+    {
+        return denom;
     }
     int NOK(Fraction x)                                                           // функция нахождения наименьшего общего кратного
     {
@@ -77,6 +86,28 @@ public:
             num *= x.denom;                                                       // то выполняем операцию деления дробей
             denom *= x.num;
         }    
+    }
+    void Output()                                                                                                 // метод для вывода строк на экран
+    {
+        std::cout << num << " " << denom << std::endl;
+    }
+    Fraction operator*(const Fraction& s)                // перегрузка опертора * для двух дробей
+    {
+        std::cout << "Перегрузка оператора *\n";
+        num *= s.num;
+        denom *= s.denom;
+
+        return *this;
+       
+    }
+
+    Fraction operator*(int r)                            // перегрузка оператора "*" - умножение на int N 
+    {
+        std::cout << "Перегрузка оператора * (int) " << r << "\n";
+        num *= r;
+        denom *= 1;
+
+        return *this;                                    
     }
     void Result()                                                                 // функция вывода результата
     {
@@ -135,10 +166,28 @@ public:
             }
         }
     }
+
+    friend  std::ostream& operator<<(std::ostream& os, const Fraction& P); // перегрузка оператора вывода 
 };
 
+Fraction operator*(int r, Fraction T)                         // глобальная перегрузка оператора "*" - умножение int N на дробь
+{
+    std::cout << "Глобальная перегрузка оператора * - умножение int " << r << " на дробь\n";
+    Fraction temp;
+    temp.Set(r * T.GetN(), T.GetD());
+
+    return temp;                                              // возврат результата в место вызова ф-ии
+}
+
+std::ostream& operator<<(std::ostream& os, const Fraction & P)  // вывод данных через поток
+{
+    os << "num = " << P.num << " ";
+    os << "denom = " << P.denom << '\n';
+    return os;
+}
 int main()
 {
+    setlocale(0, "rus");
     std::cout << " Fractional Calculator\n";
     std::cout << " For a negative value, enter the sign only in the numerator\n\n";
 
@@ -209,6 +258,19 @@ int main()
         if (choice == 1) system("cls");
 
     } while (choice);                                                                          // работа цикла длится, пока выбор пользователя true (yes)
+
+
+    one.Output();
+    two.Output();
+
+    one* two;
+    one.Output();
+
+    int r = 2;
+    one * r;
+    std::cout << one;
+    Fraction R = r * one;
+    std::cout << R;
 
     return 0;
 }

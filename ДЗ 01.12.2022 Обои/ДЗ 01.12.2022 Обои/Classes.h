@@ -13,7 +13,7 @@ class Roll
 public:
     Roll()
     {
-        //cout << "сработал конструктор Roll\n";
+        cout << "сработал конструктор Roll\n";
         if (std::cin.peek() == '\n') std::cin.get();                                        // если от предыдущих итераций остался символ \n, то стираем его
 
         if (roll_name != nullptr) delete[] roll_name;
@@ -41,7 +41,7 @@ public:
     
     ~Roll()
     {
-        //cout << "сработал деструктор Roll\n";
+        cout << "сработал деструктор Roll\n";
         if (roll_name != nullptr)
         {
             delete[] roll_name;
@@ -61,7 +61,7 @@ public:
 
     Room()
     {
-        //cout << "сработал конструктор Room\n";
+        cout << "сработал конструктор Room\n";
         if (std::cin.peek() == '\n') std::cin.get();                                        // если от предыдущих итераций остался символ \n, то стираем его
 
         char tmp[20];
@@ -91,7 +91,7 @@ public:
 
     ~Room()
     {
-        //cout << "сработал деструктор Room\n";
+        cout << "сработал деструктор Room\n";
         if (room_name != nullptr) delete[] room_name;
 
         delete[] roll;
@@ -105,8 +105,8 @@ class Flat
 public:
     Flat(int count) : rooms{ new Room[count] {} }, rooms_count{ count }                                       // происходит выделение памяти и инициалищация (комнатами)
     {
-        //cout << "сработал конструктор Flat для выделения памяти под массив размером"
-            // << rooms_count << "\n";
+        cout << "сработал конструктор Flat для выделения памяти под массив размером"
+             << rooms_count << "\n";
         system("cls");
     }
 
@@ -115,7 +115,7 @@ public:
 
     ~Flat()
     {
-        //cout << "сработал деструктор Flat\n";
+        cout << "сработал деструктор Flat\n";
         delete[] rooms;
     }
 };
