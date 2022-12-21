@@ -6,12 +6,7 @@ class Complex
 	float imagine;
 
 public:
-    Complex()
-    {
-        //std::cout << " Conctructor\n";
-        real = 0;
-        imagine = 0;
-    }
+    Complex() = default;  // вернули в класс встроенный конструктор по умолчанию
     Complex(float x, float y)
     {
         //std::cout << " Conctructor\n";
