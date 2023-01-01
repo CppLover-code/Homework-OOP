@@ -20,7 +20,7 @@ public:
 
 	DynArray(const DynArray& object) : arr{ new T[object.size] }, size{ object.size }	 // выделяем новый блок динамической памяти того же размера, что и в копируемом экземпляре класса
 	{
-		for (int i{ 0 }; i < size; ++i)													 // циклом копируем элементы из оригинального блока памяти во вновь выделенный
+		for (int i{ 0 }; i < size; ++i)							 // циклом копируем элементы из оригинального блока памяти во вновь выделенный
 		{
 			arr[i] = object.arr[i];
 		}
@@ -66,7 +66,7 @@ DynArray<T> DynArray<T>::addEl(T el)
 {
 	DynArray <T> temp{ size + 1 };
 
-	for (int i{ 0 }; i < temp.size; ++i)											// циклом копируем элементы из *this в временный объект
+	for (int i{ 0 }; i < temp.size; ++i)						    // циклом копируем элементы из *this в временный объект
 	{
 		temp.arr[i] = arr[i];
 		if (i == temp.size - 1) temp.arr[i] = el;                                   // добавляем в временный объект необходимый элемент
@@ -77,7 +77,7 @@ DynArray<T> DynArray<T>::addEl(T el)
 	arr = new T[temp.size];
 	size = temp.size;
 
-	for (int i{ 0 }; i < size; ++i)	arr[i] = temp.arr[i];						   // циклом копируем элементы из временного объекта во вновь выделенный *this
+	for (int i{ 0 }; i < size; ++i)	arr[i] = temp.arr[i];				    // циклом копируем элементы из временного объекта во вновь выделенный *this
 
 	return *this;
 }
@@ -97,9 +97,9 @@ DynArray<T> DynArray<T>::delEl()
 
 	int t = 0;
 
-	for (int i = 0; i < size; ++i)													// циклом копируем элементы из *this во временный, 
+	for (int i = 0; i < size; ++i)								// циклом копируем элементы из *this во временный, 
 	{	
-		if (i == s - 1) continue;													// но без выбранного элемента
+		if (i == s - 1) continue;							// но без выбранного элемента
 		else
 		{
 			temp.arr[t] = arr[i];
@@ -112,7 +112,7 @@ DynArray<T> DynArray<T>::delEl()
 	size = size - 1;
 	arr = new T[size];
 
-	for (int i = 0; i < size; ++i) arr[i] = temp.arr[i];							// циклом копируем элементы из временного объекта во вновь выделенный *this
+	for (int i = 0; i < size; ++i) arr[i] = temp.arr[i];					// циклом копируем элементы из временного объекта во вновь выделенный *this
 
 	return *this; 
 }
