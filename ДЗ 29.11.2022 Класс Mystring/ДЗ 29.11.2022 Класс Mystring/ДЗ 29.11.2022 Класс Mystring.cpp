@@ -20,6 +20,8 @@
     * перегрузка оператора "-" - уменьшение строки на N символов
     * глобальная перегрузка оператора "+" - увеличение строки на N символов (символы записываются в начало)
     * конструктор перемещения
+    * перегрузка оператора присваивания копированием
+    * перегрузка оператора присваивания перемещением
 */
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -34,7 +36,7 @@ class MyString
     static int numberOfObject;                          // статическое поле класса
 
 public:   
-    
+   
     MyString()                                          // конструктор по умолчанию, позволяющий создать строку длиной 80 символов
     {
         cout << " -Конструктор 1-\n";
@@ -74,6 +76,41 @@ public:
         length = s.length;
         str = s.str;
         s.str = nullptr;                                 // ВАЖНО! Оставлять указатель в согласованном состоянии
+        s.length = 0;
+    }
+    MyString& operator=(const MyString& object)               // оператор присваивания с копированием
+    {
+        cout << " -Оператор присваивания с копированием-\n";
+        if (!(this == &object))                               // если объекты не одинаковы
+        {
+           if (object.str == nullptr)                         // если копируемая строка пустая, то
+           {
+               str = nullptr;                                 // не выделяем новую дин. память для поля str текущего объекта
+               length = object.length;                        // побитово копируем длину
+               return *this;                                  // возвращаем изменённый текущий объект (далее тело ф-ии не выполняется)
+           }
+           if (str != nullptr)                                // если текущая строка, для которой вызывается функция, не явл. пустой,
+           {
+               delete[] str;                                  // освобождаем память str
+           }
+           str = new char[strlen(object.str) + 1];            
+           strcpy_s(str, strlen(object.str) + 1, object.str);
+           length = object.length;
+        }
+        return *this;
+    }
+    MyString& operator=(MyString&& object) noexcept          // оператор присваивания с перемещением
+    {
+        cout << " -Оператор присваивания с перемещением-\n";
+        if (!(this == &object))                              // если текущий объект не равен копируемому
+        {
+           delete[] str;                                     
+           str = object.str;                                 
+           length = object.length;
+           object.str = nullptr;
+           object.length = 0;
+        }
+       return *this;
     }
 
     MyString operator+(const MyString& s)                // перегрузка опертора + для двух строк
@@ -220,11 +257,18 @@ public:
 
     void Output()                                      // метод для вывода строк на экран
     {
+        if (str == nullptr)
+        {
+            cout << "Empty object!\n";
+            cout << (void*)str << endl
+                << "-------------------------------------"
+                << endl;
+            return;
+        }
         cout << str << endl 
             << "-------------------------------------" 
             << endl;
     }
-
     static int getNumber()  // статическая функция-член для подсчёта кол-ва созданных объектов
     {
         return numberOfObject;
@@ -341,6 +385,28 @@ int main()
     cin >> D;
     MyString NEW3 = D + str11;
     NEW3.Output();
+
+    cout << "Перегрузка оператора присваивания копированием\n";
+    MyString str12("Test string 1");
+    str12.Output();
+
+    MyString str13("Test string 2");
+    str13.Output();
+
+    str12 = str13;  // оператор присваивания с копированием
+    str12.Output();
+    str13.Output();
+
+    cout << "Перегрузка оператора присваивания перемещением\n";
+    MyString str14("Hello world");
+    str14.Output();
+
+    MyString str15("Hello kitty");
+    str15.Output();
+
+    str14 = move(str15); // оператор присваивания с перемещением
+    str14.Output();
+    str15.Output();
 
     cout << "Количество созданных объектов-строк - " << MyString::getNumber() << endl;
 
