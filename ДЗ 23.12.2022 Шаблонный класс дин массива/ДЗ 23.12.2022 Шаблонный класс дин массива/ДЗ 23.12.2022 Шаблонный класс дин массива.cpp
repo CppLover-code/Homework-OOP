@@ -154,11 +154,11 @@ public:
 	{
 		//std::cout << "Constructor\n";
 	}
-	/*~DynArray()
+	~DynArray()
 	{
 		std::cout << "Destructor point\n";
 		delete[] arr;
-	}*/
+	}
 
 	void print()
 	{
@@ -203,11 +203,11 @@ public:
 	{
 		//std::cout << "Constructor\n";
 	}
-	//~DynArray()
-	//{
-	//	//std::cout << "Destructor char\n";
-	//	delete[] arr;
-	//}
+	~DynArray()
+	{
+		//std::cout << "Destructor char\n";
+		delete[] arr;
+	}
 
 	void random()
 	{
