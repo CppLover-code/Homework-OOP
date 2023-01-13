@@ -6,7 +6,6 @@
 	класса, инкаспулирующие массивы типа int, double, char и Point.
 	Point - это класс, содержащий 2 поля (координаты точки): int x и int y.
 */
-// Заметки для меня: разобраться нужны ли деструкторы для char и Point + оптимизация кода!!!
 
 #include <iostream>
 
@@ -15,30 +14,21 @@ class Point
 	int x;
 	int y;
 public:
-	Point()
-	{
-		x = 10 + rand() % 20;
-		y = 10 + rand() % 40;
-	}
+
+	Point() : x{ 0 }, y{ 0 } {}
+	Point(float t) : x{ (int)t }, y{ (int)t + 2 } {}
 
 	int getX() { return x; }
 	int getY() { return y; }
-
-	friend int operator+=(int& s, Point& obj);
 };
 
-template <class T> 
-class DynArray
+template <class T> class DynArray
 {
 	T* arr;
 	int size;
 
 public:
-	DynArray(int sizeP) : arr{ new T[sizeP] {} }, size{ sizeP }
-	{
-		//std::cout << "Constructor\n";
-	}
-
+	DynArray(int sizeP) : arr{ new T[sizeP] {} }, size{ sizeP } {}
 	DynArray(const DynArray& object) : arr{ new T[object.size] }, size{ object.size }	 // выделяем новый блок динамической памяти того же размера, что и в копируемом экземпляре класса
 	{
 		for (int i{ 0 }; i < size; ++i)													 // циклом копируем элементы из оригинального блока памяти во вновь выделенный
@@ -47,46 +37,61 @@ public:
 		}
 		//std::cout << "Copy ctor\n";
 	}
-	
-	void random()
-	{
-		double x;
-		for (int i = 0; i < size; ++i)
-		{
-			x = (650 + rand() % 570) * 0.1;                                             // рандом от 650 до 1220 
-			arr[i] = (T)x;
-		}
-	}
-	void print()
-	{
-		for (int i{ 0 }; i < size; ++i)
-		{
-			std::cout << arr[i] << ' ';
-		}
-		std::cout << "\n";
-	}
-	T sum()
-	{
-		T sum = 0;
 
-		for (int i{ 0 }; i < size; ++i) sum += arr[i];
-		return sum;
-	}
-	void printSum()
-	{
-		std::cout << " Sum of array elements "
-			<< this->sum() << "\n\n";
-	}
+	int getElem(int idx) { return arr[idx]; }
+	void setElem(int idx, int val) { arr[idx] = val; }
+	void print();
+	void random();
+	float sum();
+	void printSum();
 	DynArray<T> addEl(T el);
 	DynArray<T> delEl();
-	friend int operator+=(int& s, Point& obj);
-	friend std::ostream& operator<<(std::ostream& out, Point& obj);
+
 	~DynArray()
 	{
-		//std::cout << "Destructor главный\n";
+		//std::cout << "Destructor\n";
 		delete[] arr;
 	}
 };
+
+template <class T>
+void DynArray<T>::print()
+{
+	for (int i{ 0 }; i < size; ++i)
+	{
+		std::cout << arr[i] << ' ';
+	}
+	std::cout << "\n";
+}
+
+template <class T>
+void DynArray<T>::random()
+{
+	double x;
+	for (int i{ 0 }; i < size; ++i)
+	{
+		x = (650 + rand() % 570) * 0.1;                                             // рандом от 650 до 1220 
+		arr[i] = (T)x;
+	}
+}
+
+template <class T>
+float DynArray<T>::sum()
+{
+	float sum = 0;
+	for (int i{ 0 }; i < size; ++i)
+	{
+		sum += arr[i];
+	}
+	return sum;
+}
+
+template <class T>
+void DynArray<T>::printSum()
+{
+	std::cout << " Sum of array elements "
+		<< this->sum() << "\n\n";
+}
 
 template <class T>
 DynArray<T> DynArray<T>::addEl(T el)
@@ -119,13 +124,13 @@ DynArray<T> DynArray<T>::delEl()
 		std::cin >> s;
 		if (s > size) std::cout << " This number does not exist!\n";
 	} while (s > size);
-	
+
 	DynArray <T> temp{ size - 1 };
 
 	int t = 0;
 
 	for (int i = 0; i < size; ++i)								// циклом копируем элементы из *this во временный, 
-	{	
+	{
 		if (i == s - 1) continue;								// но без выбранного элемента
 		else
 		{
@@ -141,108 +146,20 @@ DynArray<T> DynArray<T>::delEl()
 
 	for (int i = 0; i < size; ++i) arr[i] = temp.arr[i];					// циклом копируем элементы из временного объекта во вновь выделенный *this
 
-	return *this; 
+	return *this;
 }
 
-template <>
-class DynArray<Point>
-{
-	Point* arr;
-	int size;
-public:
-	DynArray(int sizeP) : arr{ new Point[sizeP] {} }, size{ sizeP }
-	{
-		//std::cout << "Constructor\n";
-	}
-	~DynArray()
-	{
-		std::cout << "Destructor point\n";
-		delete[] arr;
-	}
-
-	void print()
-	{
-		for (int i{ 0 }; i < size; ++i)
-		{
-			std::cout << arr[i].getX() << ' ' << arr[i].getY() << " ";
-		}
-		std::cout << "\n";
-	}
-	int sum()
-	{
-		int sum = 0;
-
-		for (int i{ 0 }; i < size; ++i) sum += arr[i];
-		return sum;
-	}
-	void printSum()
-	{
-		std::cout << " Sum of array elements "
-			<< sum() << "\n\n";
-	}
-};
-
-std::ostream& operator<<(std::ostream& out, Point& obj)  // перегрузка вывода в консоль
+std::ostream& operator<<(std::ostream& out, Point& obj) // перегрузка вывода в консоль
 {
 	out << obj.getX() << " " << obj.getY();
 	return out;
 }
-int operator+=(int& s, Point& obj)                       // глобальная перегрузка оператора +=
+
+float operator+=(float& s, Point& obj)                       // глобальная перегрузка оператора +=
 {
 	s = s + obj.getX() + obj.getY();
 	return s;
 }
-
-template <>
-class DynArray<char>
-{
-	char* arr;
-	int size;
-public:
-	DynArray(int sizeP) : arr{ new char[sizeP] {} }, size{ sizeP }
-	{
-		//std::cout << "Constructor\n";
-	}
-	~DynArray()
-	{
-		//std::cout << "Destructor char\n";
-		delete[] arr;
-	}
-
-	void random()
-	{
-		int x;
-		for (int i{ 0 }; i < size; ++i)
-		{
-			x = 58 + rand() % 68;                                             // рандом от 650 до 1220 
-			arr[i] = x;
-		}
-	}
-	void print()
-	{
-		for (int i{ 0 }; i < size; ++i)
-		{
-			std::cout << arr[i] << ' ';
-		}
-		std::cout << "\n";
-	}
-	int sum()
-	{
-		int sum = 0;
-
-		for (int i{ 0 }; i < size; ++i)
-		{
-			sum += arr[i];
-		}
-		return sum;
-	}
-	void printSum()
-	{
-		std::cout << " Sum of array elements "
-			<< sum() << "\n\n";
-	}
-};
-
 
 int main()
 {
@@ -280,7 +197,8 @@ int main()
 	std::cout << " Removing element from ar1: ";
 	ar1.print();
 
-	DynArray <Point> ar5{3};
+	DynArray <Point> ar5{ 3 };
+	ar5.random();
 	std::cout << "\n" << " ar5 elements(Point): ";
 	ar5.print();
 	ar5.printSum();
@@ -288,9 +206,7 @@ int main()
 	return 0;
 }
 
-// Второй вариант -  неточно  считает для double, потому что переменная для подсчёта суммы имеет тип данных int
-// НО РАБОТАЕТ
-
+// вариант с специализацией
 //#include <iostream>
 //
 //class Point
@@ -306,9 +222,12 @@ int main()
 //
 //	int getX() { return x; }
 //	int getY() { return y; }
+//
+//	friend int operator+=(int& s, Point& obj);
 //};
 //
-//template <class T> class DynArray
+//template <class T> 
+//class DynArray
 //{
 //	T* arr;
 //	int size;
@@ -319,8 +238,6 @@ int main()
 //		//std::cout << "Constructor\n";
 //	}
 //
-//	DynArray() : DynArray(5) {}
-//
 //	DynArray(const DynArray& object) : arr{ new T[object.size] }, size{ object.size }	 // выделяем новый блок динамической памяти того же размера, что и в копируемом экземпляре класса
 //	{
 //		for (int i{ 0 }; i < size; ++i)													 // циклом копируем элементы из оригинального блока памяти во вновь выделенный
@@ -329,60 +246,46 @@ int main()
 //		}
 //		//std::cout << "Copy ctor\n";
 //	}
-//	int getElem(int idx) { return arr[idx]; }
-//	void setElem(int idx, int val) { arr[idx] = val; }
-//	void print();
-//	void random();
-//	int sum();
-//	void printSum();
+//	
+//	void random()
+//	{
+//		double x;
+//		for (int i = 0; i < size; ++i)
+//		{
+//			x = (650 + rand() % 570) * 0.1;                                             // рандом от 650 до 1220 
+//			arr[i] = (T)x;
+//		}
+//	}
+//	void print()
+//	{
+//		for (int i{ 0 }; i < size; ++i)
+//		{
+//			std::cout << arr[i] << ' ';
+//		}
+//		std::cout << "\n";
+//	}
+//	T sum()
+//	{
+//		T sum = 0;
+//
+//		for (int i{ 0 }; i < size; ++i) sum += arr[i];
+//		return sum;
+//	}
+//	void printSum()
+//	{
+//		std::cout << " Sum of array elements "
+//			<< this->sum() << "\n\n";
+//	}
 //	DynArray<T> addEl(T el);
 //	DynArray<T> delEl();
-//
+//	friend int operator+=(int& s, Point& obj);
+//	friend std::ostream& operator<<(std::ostream& out, Point& obj);
 //	~DynArray()
 //	{
-//		//std::cout << "Destructor\n";
+//		//std::cout << "Destructor главный\n";
 //		delete[] arr;
 //	}
 //};
-//
-//template <class T>
-//void DynArray<T>::print()
-//{
-//	for (int i{ 0 }; i < size; ++i)
-//	{
-//		std::cout << arr[i] << ' ';
-//	}
-//	std::cout << "\n";
-//}
-//
-//template <class T>
-//void DynArray<T>::random()
-//{
-//	double x;
-//	for (int i{ 0 }; i < size; ++i)
-//	{
-//		x = (650 + rand() % 570) * 0.1;                                             // рандом от 650 до 1220 
-//		arr[i] = (T)x;
-//	}
-//}
-//
-//template <class T>
-//int DynArray<T>::sum()
-//{
-//	int sum = 0;
-//	for (int i{ 0 }; i < size; ++i)
-//	{
-//		sum += arr[i];
-//	}
-//	return sum;
-//}
-//
-//template <class T>
-//void DynArray<T>::printSum()
-//{
-//	std::cout << " Sum of array elements "
-//		<< this->sum() << "\n\n";
-//}
 //
 //template <class T>
 //DynArray<T> DynArray<T>::addEl(T el)
@@ -415,13 +318,13 @@ int main()
 //		std::cin >> s;
 //		if (s > size) std::cout << " This number does not exist!\n";
 //	} while (s > size);
-//
+//	
 //	DynArray <T> temp{ size - 1 };
 //
 //	int t = 0;
 //
 //	for (int i = 0; i < size; ++i)								// циклом копируем элементы из *this во временный, 
-//	{
+//	{	
 //		if (i == s - 1) continue;								// но без выбранного элемента
 //		else
 //		{
@@ -437,20 +340,108 @@ int main()
 //
 //	for (int i = 0; i < size; ++i) arr[i] = temp.arr[i];					// циклом копируем элементы из временного объекта во вновь выделенный *this
 //
-//	return *this;
+//	return *this; 
 //}
 //
-//std::ostream& operator<<(std::ostream& out, Point& obj) // перегрузка вывода в консоль
+//template <>
+//class DynArray<Point>
+//{
+//	Point* arr;
+//	int size;
+//public:
+//	DynArray(int sizeP) : arr{ new Point[sizeP] {} }, size{ sizeP }
+//	{
+//		//std::cout << "Constructor\n";
+//	}
+//	~DynArray()
+//	{
+//		std::cout << "Destructor point\n";
+//		delete[] arr;
+//	}
+//
+//	void print()
+//	{
+//		for (int i{ 0 }; i < size; ++i)
+//		{
+//			std::cout << arr[i].getX() << ' ' << arr[i].getY() << " ";
+//		}
+//		std::cout << "\n";
+//	}
+//	int sum()
+//	{
+//		int sum = 0;
+//
+//		for (int i{ 0 }; i < size; ++i) sum += arr[i];
+//		return sum;
+//	}
+//	void printSum()
+//	{
+//		std::cout << " Sum of array elements "
+//			<< sum() << "\n\n";
+//	}
+//};
+//
+//std::ostream& operator<<(std::ostream& out, Point& obj)  // перегрузка вывода в консоль
 //{
 //	out << obj.getX() << " " << obj.getY();
 //	return out;
 //}
-//
 //int operator+=(int& s, Point& obj)                       // глобальная перегрузка оператора +=
 //{
 //	s = s + obj.getX() + obj.getY();
 //	return s;
 //}
+//
+//template <>
+//class DynArray<char>
+//{
+//	char* arr;
+//	int size;
+//public:
+//	DynArray(int sizeP) : arr{ new char[sizeP] {} }, size{ sizeP }
+//	{
+//		//std::cout << "Constructor\n";
+//	}
+//	~DynArray()
+//	{
+//		//std::cout << "Destructor char\n";
+//		delete[] arr;
+//	}
+//
+//	void random()
+//	{
+//		int x;
+//		for (int i{ 0 }; i < size; ++i)
+//		{
+//			x = 58 + rand() % 68;                                             // рандом от 650 до 1220 
+//			arr[i] = x;
+//		}
+//	}
+//	void print()
+//	{
+//		for (int i{ 0 }; i < size; ++i)
+//		{
+//			std::cout << arr[i] << ' ';
+//		}
+//		std::cout << "\n";
+//	}
+//	int sum()
+//	{
+//		int sum = 0;
+//
+//		for (int i{ 0 }; i < size; ++i)
+//		{
+//			sum += arr[i];
+//		}
+//		return sum;
+//	}
+//	void printSum()
+//	{
+//		std::cout << " Sum of array elements "
+//			<< sum() << "\n\n";
+//	}
+//};
+//
 //
 //int main()
 //{
@@ -488,14 +479,10 @@ int main()
 //	std::cout << " Removing element from ar1: ";
 //	ar1.print();
 //
-//	DynArray <Point> ar5{ 3 };
+//	DynArray <Point> ar5{3};
 //	std::cout << "\n" << " ar5 elements(Point): ";
 //	ar5.print();
 //	ar5.printSum();
 //
 //	return 0;
 //}
-
-
-
-
