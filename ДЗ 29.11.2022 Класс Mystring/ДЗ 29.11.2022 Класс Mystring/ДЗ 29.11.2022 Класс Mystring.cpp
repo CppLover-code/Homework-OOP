@@ -22,6 +22,7 @@
     * конструктор перемещения
     * перегрузка оператора присваивания копированием
     * перегрузка оператора присваивания перемещением
+    * конструктор Initializer_list
 */
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -59,6 +60,18 @@ public:
         length = strlen(s);
         str = new char[length + 1];
         if (str) strcpy_s(str,length + 1, s);
+        numberOfObject++;
+    }
+
+    MyString(const initializer_list<char>& list) : MyString(list.size())  // конструктор Initializer_list
+    {
+        length = list.size();
+        for (auto ptr = list.begin(); ptr != list.end(); ptr++) // list.end() - следу.щий за последним
+        {
+            *str = *ptr; // получение доступа к элементу списка, скопировали 1 эл списка в 0 индекс массива data  и тд
+            str++;
+        }
+        str -= length; // смещение указателя на начало массива
         numberOfObject++;
     }
 
@@ -407,6 +420,10 @@ int main()
     str14 = move(str15); // оператор присваивания с перемещением
     str14.Output();
     str15.Output();
+
+    cout << " Конструктор initializer_list\n";
+    MyString str16{ 'P','r','i','v','e','t','\0'};
+    str16.Output();
 
     cout << "Количество созданных объектов-строк - " << MyString::getNumber() << endl;
 
