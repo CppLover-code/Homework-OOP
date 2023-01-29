@@ -14,8 +14,8 @@ using namespace std;
 
 class Processor
 {
-	string manufacturer;																			// производитель 
-	int core;																						// количество ядер
+	string manufacturer;											// производитель 
+	int core;												// количество ядер
 public:
 	Processor()
 	{
@@ -32,7 +32,7 @@ public:
 };
 class RAM 
 {
-	int volume;																						// объем памяти
+	int volume;												// объем памяти
 public:
 
 	RAM() : volume{256}{}
@@ -45,7 +45,7 @@ public:
 };
 class Mouse
 {
-	string manufacturer;																			// производитель 
+	string manufacturer;											// производитель 
 public:
 	Mouse() : manufacturer{ " Logitech" } {}
 	Mouse(string s) : manufacturer{ s } {}
@@ -57,7 +57,7 @@ public:
 };
 class Camera 
 {
-	int resolution;																					// разрешение
+	int resolution;												// разрешение
 public:
 	Camera() : resolution{ 640 } {}
 	Camera(int r) : resolution{ r } {}
@@ -69,7 +69,7 @@ public:
 };
 class Printer
 {
-	string manufacturer;																			// производитель 
+	string manufacturer;											// производитель 
 public:
 	Printer() : manufacturer{ " Xerox" } {}
 	Printer(string s) : manufacturer{ s } {}
@@ -81,7 +81,7 @@ public:
 };
 class Videocard
 {
-	string manufacturer;																			// производитель 
+	string manufacturer;											// производитель 
 public:
 	Videocard() : manufacturer{ " NVIDIA" } {}
 	Videocard(string s) : manufacturer{ s } {}
@@ -95,9 +95,9 @@ public:
 class Laptop
 {
 	string Notebook_model;
-	Processor processor;																			// сильная связь - композиция
+	Processor processor;											// сильная связь - композиция
 	RAM memory;
-	Mouse* mouse;																					// слабая связь - агрегация
+	Mouse* mouse;												// слабая связь - агрегация
 	Camera camera;
 	Printer* printer; 
 	Videocard videocard;
