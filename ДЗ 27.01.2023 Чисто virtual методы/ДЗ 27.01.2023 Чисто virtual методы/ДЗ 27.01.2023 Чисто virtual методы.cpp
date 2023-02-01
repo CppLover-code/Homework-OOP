@@ -314,7 +314,7 @@ public:
 };
 Vehicle::Vehicle()
 {
-    cout << " C-tor by default Vehicle\n";  // поле "name" можно не инициализировать, так как пустая строка содержит " " символ пробела
+    cout << " C-tor by default Vehicle\n";  // поле "name" можно не инициализировать, так как пустая строка содержит " " (Урок №5, стр 107)
     aver_cnsmptn = 0;
     capacity = 0;
     seats = 0;
