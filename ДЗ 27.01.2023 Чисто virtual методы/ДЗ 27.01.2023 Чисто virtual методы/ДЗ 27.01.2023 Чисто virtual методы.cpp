@@ -626,7 +626,11 @@ int main()
         vehicle[i]->~Vehicle();
 
         Sleep(1500);
-        system("cls");
+        system("cls");    
+    }
+    for (size_t i = 0; i < 4; i++)
+    {
+       delete vehicle[i];  // освобождаем динамически выделенную память для текущего объекта
     }
 
     return 0;
