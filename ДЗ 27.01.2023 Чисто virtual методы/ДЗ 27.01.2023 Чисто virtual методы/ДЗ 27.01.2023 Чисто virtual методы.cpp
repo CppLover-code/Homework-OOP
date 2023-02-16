@@ -305,7 +305,7 @@ public:
     Vehicle();
     virtual ~Vehicle()  = 0;
     virtual void Name() = 0;        // метод для ввода названия 
-    virtual void Aver() = 0;        //  метод для ввода среднего расхода топлива на 100 км
+    virtual void Aver() = 0;        // метод для ввода среднего расхода топлива на 100 км
     virtual void Capacity() = 0;    // метод для ввода грузоподъемности
     virtual void Seats()  = 0;      // метод для ввода кол-ва мест для сидения
     virtual void Consumption() = 0; // метод рассчета расхода топлива
